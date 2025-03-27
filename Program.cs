@@ -1,0 +1,180 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AlgGenetyczny
+{
+    internal class Program
+    {
+        private static Random rand = new Random();
+
+        public static double Przystosowanie(double[] Osobnik)
+        {
+            double[][] wejsciesieci = new double[][]
+            {
+                new double[] { 0, 0 },
+                new double[] { 0, 1 },
+                new double[] { 1, 0 },
+                new double[] { 1, 1 }
+            };
+            double przystosowanie = 0.0;
+            double[] XOR = {0,1,1,0 };
+            for (int i = 0; i < wejsciesieci.Length; i++)
+            {
+
+                przystosowanie += Math.Pow(, 2);
+            }
+            return przystosowanie;
+        }
+        public static int[][] StworzPule2(int ilosc, int chromosomy)
+        {
+            //Random rand = new Random();
+            int[][] Pula = new int[ilosc][];
+            for (int i = 0; i < ilosc; i++)
+            {
+                int[] osobnikTymczasowy = new int[chromosomy];
+                for (int j = 0; j < chromosomy; j++)
+                {
+                    int bitlosowy = rand.Next(0, 2);
+                    osobnikTymczasowy[j] = bitlosowy;
+                }
+                Pula[i] = osobnikTymczasowy;
+            }
+            return Pula;
+        }
+        public static double[][] StworzPule(int ilosc, int lParametrow, int Min, int Max)
+        {
+            //Random rand = new Random();
+            double[][] Pula = new double[ilosc][];
+            for (int i = 0; i < ilosc; i++)
+            {
+                double[] osobnikTymczasowy = new double[lParametrow];
+                for (int j = 0; j < lParametrow; j++)
+                {
+                    double PARAMETRlosowy = Min + (Max - Min) * rand.NextDouble();
+                    osobnikTymczasowy[j] = PARAMETRlosowy;
+                }
+                Pula[i] = osobnikTymczasowy;
+            }
+            return Pula;
+        }
+        public static int[] Kodowanie(double pm, float Max, float Min, int liczbaCh)
+        {
+            float ZD = Max - Min;
+            int[] cb = new int[3];
+            if (pm < Min)
+            {
+                pm = Min;
+            }
+            else if (pm > Max)
+            {
+                pm = Max;
+            }
+            double ctmp = Math.Round(((pm - Min) / ZD) * (Math.Pow(2, liczbaCh) - 1));
+            for (int b = 0; b <= liczbaCh - 1; b++)
+            {
+                cb[b] = (int)Math.Floor(ctmp / Math.Pow(2, b)) % 2;
+            }
+            return cb;
+        }
+        public static double Dekodowanie(int[] cb, float Min, float Max, int LBnP)
+        {
+            float ZD = Max - Min;
+            double ctmp = 0;
+            for (int b = 0; b <= LBnP - 1; b++)
+            {
+                ctmp += cb[b] * Math.Pow(2, b);
+            }
+            double pm = Min + (ctmp / (Math.Pow(2, LBnP) - 1)) * ZD;
+            return pm;
+        }
+        public static int[] OperatorSelTurniejowej(int[][] pulaOsobnikow, double[] ocenaOsobnikow)
+        {
+            int RozmiarTurnieju = 3;
+            int[] skladTurnieju = new int[RozmiarTurnieju];
+            //Random rand = new Random();
+            for (int i = 0; i < RozmiarTurnieju; i++)
+            {
+                skladTurnieju[i] = rand.Next(pulaOsobnikow.Length);
+            }
+
+            int najI = skladTurnieju[0];
+            for (int i = 1; i < RozmiarTurnieju; i++)
+            {
+                if (ocenaOsobnikow[skladTurnieju[i]] < ocenaOsobnikow[najI])
+                {
+                    najI = skladTurnieju[i];
+                }
+            }
+            return pulaOsobnikow[najI];
+        }
+        public static (int[], int[]) OperatorKrzyżowania(int[] cbr1, int[] cbr2)
+        {
+            int LBnOs = cbr1.Length;
+            // Random rand = new Random();
+            int bCiecie = rand.Next(0, LBnOs - 2);
+            //Console.WriteLine("Wylosowane miejsce przeciecia: " + bCiecie);
+            int[] cbp1 = new int[cbr1.Length];
+            int[] cbp2 = new int[cbr2.Length];
+            for (int i = 0; i < bCiecie; i++)
+            {
+                cbp1[i] = cbr1[i];
+                cbp2[i] = cbr2[i];
+            }
+            for (int j = bCiecie; j < LBnOs; j++)
+            {
+                cbp1[j] = cbr2[j];
+                cbp2[j] = cbr1[j];
+            }
+            return (cbp1, cbp2);
+        }
+        public static int[] OperatorMutacji(int[] cb)
+        {
+            int LBnOs = cb.Length;
+            //Random rand = new Random();
+            int bPunkt = rand.Next(0, LBnOs - 1);
+            // Console.WriteLine("Wylosowany punkt mutacji: " + bPunkt);
+            int[] cbwy = new int[LBnOs];
+            for (int i = 0; i < LBnOs; i++)
+            {
+                cbwy[i] = cb[i];
+            }
+            if (cbwy[bPunkt] == 0)
+            {
+                cbwy[bPunkt] = 1;
+            }
+            else if (cbwy[bPunkt] == 1)
+            {
+                cbwy[bPunkt] = 0;
+            }
+            return cbwy;
+        }
+        public static int[] OperatorHotDeck(int[][] pulaOsobnikow, double[] ocenaOsobnikow)
+        {
+            int najlepszy = 0;
+            for (int i = 1; i < pulaOsobnikow.Length; i++)
+            {
+                if (ocenaOsobnikow[i] > ocenaOsobnikow[najlepszy])
+                {
+                    najlepszy = i;
+                }
+            }
+            return pulaOsobnikow[najlepszy];
+        }
+        static void Main(string[] args)
+        {
+
+            int LBnP = 4;
+            int lParametrow = 3;
+            int lChromosomow = LBnP * lParametrow;
+            int lOsobnikow = 13;
+            float Min = -10;
+            float Max = 10;
+
+            Console.ReadKey();
+        }
+    }
+}
