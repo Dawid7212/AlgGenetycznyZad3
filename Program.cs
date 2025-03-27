@@ -177,7 +177,7 @@ namespace AlgGenetyczny
             int lOsobnikow = 13;
             float Min = -10;
             float Max = 10;
-            int[][] Pula = StworzPule2(13, 27);
+            int[][] Pula = StworzPule2(lOsobnikow , lChromosomow);
             double[][] PulaDekodowana = new double[Pula.Length][];
             for(int i = 0; i < Pula.Length; i++)
             {
