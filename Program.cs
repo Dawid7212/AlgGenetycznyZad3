@@ -25,9 +25,13 @@ namespace AlgGenetyczny
             for (int i = 0; i < wejsciesieci.Length; i++)
             {
 
-                przystosowanie += Math.Pow(, 2);
+                przystosowanie += Math.Pow(XOR[i] - SymulacjaSieci(wejsciesieci[i]), 2);
             }
             return przystosowanie;
+        }
+        public static double SymulacjaSieci(double[] wejscie )
+        {
+            return wejscie[0] + wejscie[1];
         }
         public static int[][] StworzPule2(int ilosc, int chromosomy)
         {
@@ -167,12 +171,18 @@ namespace AlgGenetyczny
         static void Main(string[] args)
         {
 
-            int LBnP = 4;
-            int lParametrow = 3;
+            int LBnP = 3;
+            int lParametrow = 9;
             int lChromosomow = LBnP * lParametrow;
             int lOsobnikow = 13;
             float Min = -10;
             float Max = 10;
+            int[][] Pula = StworzPule2(13, 27);
+            double[][] PulaDekodowana = new double[Pula.Length][];
+            for(int i = 0; i < Pula.Length; i++)
+            {
+
+            }
 
             Console.ReadKey();
         }
