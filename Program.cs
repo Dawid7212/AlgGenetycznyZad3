@@ -206,7 +206,40 @@ namespace AlgGenetyczny
                 {
                     NowaPula[j] = OperatorSelTurniejowej(Pula,przystosowanie);
                 }
+                (NowaPula[0], NowaPula[1]) = OperatorKrzyżowania(NowaPula[0], NowaPula[1]);
+                (NowaPula[2], NowaPula[3]) = OperatorKrzyżowania(NowaPula[2], NowaPula[3]);
+                (NowaPula[8], NowaPula[9]) = OperatorKrzyżowania(NowaPula[8], NowaPula[9]);
+                (NowaPula[NowaPula.Length - 3], NowaPula[NowaPula.Length - 2]) = OperatorKrzyżowania(NowaPula[NowaPula.Length - 3], NowaPula[NowaPula.Length - 2]);
+                for (int j = 4; j < NowaPula.Length - 1; j++)
+                {
+                    NowaPula[j] = OperatorMutacji(NowaPula[j]);
+                }
+                NowaPula[NowaPula.Length - 1] = OperatorHotDeck(Pula, przystosowanie);
 
+
+                double[][] nowaPulaDekodowana = new double[NowaPula.Length][];
+                int[] chromosomytmp = new int[Pula[0].Length / lParametrow];
+                double[] noweprzystosowanie = new double[NowaPula.Length];
+                for (int k = 0; k < NowaPula.Length; k++)
+                {
+                    double[] ocenaTymczasowa = new double[lParametrow];
+                    int y = 0;
+                    for (int z = 0; z < lParametrow; z++)
+                    {
+                        for (int j = 0; j < NowaPula[0].Length / lParametrow; j++)
+                        {
+                            chromosomytmp[j] = NowaPula[k][y];
+                            y++;
+                        }
+                        ocenaTymczasowa[z] = Dekodowanie(chromosomytmp, Min, Max, LBnP);
+                    }
+                    nowaPulaDekodowana[k] = ocenaTymczasowa;
+                    noweprzystosowanie[k] = Przystosowanie(ocenaTymczasowa);
+                }
+                Console.WriteLine("Srednia przystosowania pierwotnej puli: " + noweprzystosowanie.Average());
+                Console.WriteLine("Najlepsze przystosowanie w pierwotnej puli: " + noweprzystosowanie.Min());
+                Pula = NowaPula;
+                przystosowanie = noweprzystosowanie;
             }
                 Console.ReadKey();
         }
