@@ -25,13 +25,37 @@ namespace AlgGenetyczny
             for (int i = 0; i < wejsciesieci.Length; i++)
             {
 
-                przystosowanie += Math.Pow(XOR[i] - SymulacjaSieci(wejsciesieci[i],Osobnik), 2);
+                przystosowanie += Math.Pow(XOR[i] - SiecNeuronowa(wejsciesieci[i],Osobnik), 2);
             }
             return przystosowanie;
         }
-        public static double SymulacjaSieci(double[] wejscie, double[] Osobnik)
+        public static double SiecNeuronowa(double[] wejscie, double[] Osobnik)
         {
-            return wejscie[0] + wejscie[1];
+            double[] neurony;
+            double wyjscie = 0;
+            for (int i=0; i<Osobnik.Length;i++)
+            {
+                for (int j=0; j<wejscie.Length;j++)
+                {
+                    
+                }
+            }
+            return wyjscie;
+        }
+        public static double FAktywacji(double neuron)
+        {
+            return neuron * neuron;
+        }
+        public static double Neuron(double[] Wagi, double[] wejscie)
+        {
+            double neuron = 0;
+    
+                for (int j = 0; j < wejscie.Length; j++)
+                {
+                    neuron += Wagi[j] * wejscie[j];
+                }
+            neuron += Wagi[Wagi.Length - 1];
+            return neuron;
         }
         public static int[][] StworzPule2(int ilosc, int chromosomy)
         {
@@ -172,22 +196,22 @@ namespace AlgGenetyczny
         {
 
             int LBnP = 4;
-            int lParametrow = 9;
-            int lChromosomow = LBnP * lParametrow;
+            int lWag = 9;
+            int lChromosomow = LBnP * lWag;
             int lOsobnikow = 13;
             float Min = -10;
             float Max = 10;
             int[][] Pula = StworzPule2(lOsobnikow , lChromosomow);
             double[][] PulaDekodowana = new double[Pula.Length][];
-            int[] Bityparametrtymczasowy = new int[Pula[0].Length / lParametrow];
+            int[] Bityparametrtymczasowy = new int[Pula[0].Length / lWag];
             double[] przystosowanie = new double[lOsobnikow];
             for (int i = 0; i < Pula.Length; i++)
             {
-                double[] ParametryTymczasowe = new double[lParametrow];
+                double[] ParametryTymczasowe = new double[lWag];
                 int y = 0;
-                for (int z = 0; z < lParametrow; z++)
+                for (int z = 0; z < lWag; z++)
                 {
-                    for (int j = 0; j < Pula[0].Length / lParametrow; j++)
+                    for (int j = 0; j < Pula[0].Length / lWag; j++)
                     {
                         Bityparametrtymczasowy[j] = Pula[i][y];
                         y++;
@@ -199,6 +223,7 @@ namespace AlgGenetyczny
             }
             Console.WriteLine("Srednia przystosowania pierwotnej puli: " + przystosowanie.Average());
             Console.WriteLine("Najlepsze przystosowanie w pierwotnej puli: " + przystosowanie.Min());
+            /*
             for (int i = 0; i<100; i++)
             {
                 int[][] NowaPula = new int[Pula.Length][];
@@ -241,6 +266,7 @@ namespace AlgGenetyczny
                 Pula = NowaPula;
                 przystosowanie = noweprzystosowanie;
             }
+            */
                 Console.ReadKey();
         }
     }
