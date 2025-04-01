@@ -11,7 +11,7 @@ namespace AlgGenetyczny
     {
         private static Random rand = new Random();
 
-        public static double Przystosowanie(double[] Osobnik)
+        public static double Przystosowanie(double[] Osobnik, int LiczbaPmNeurona)
         {
             double[][] wejsciesieci = new double[][]
             {
@@ -25,20 +25,37 @@ namespace AlgGenetyczny
             for (int i = 0; i < wejsciesieci.Length; i++)
             {
 
-                przystosowanie += Math.Pow(XOR[i] - SiecNeuronowa(wejsciesieci[i],Osobnik), 2);
+                przystosowanie += Math.Pow(XOR[i] - SiecNeuronowa(wejsciesieci[i],Osobnik,LiczbaPmNeurona), 2);
             }
             return przystosowanie;
         }
-        public static double SiecNeuronowa(double[] wejscie, double[] Osobnik)
+        public static double SiecNeuronowa(double[] wejscie, double[] Osobnik, int LiczbaPmNeurona)
         {
-            double[] neurony;
+            double[] neurony = new double[Osobnik.Length/LiczbaPmNeurona];
             double wyjscie = 0;
-            for (int i=0; i<Osobnik.Length;i++)
+            int y = 0;
+            for (int i=0; i<Osobnik.Length/LiczbaPmNeurona;i++)
             {
-                for (int j=0; j<wejscie.Length;j++)
+                double[] PmTymczasowe = new double[LiczbaPmNeurona];    
+                for (int j=0; j<LiczbaPmNeurona;j++)
                 {
-                    
+                    PmTymczasowe[j] = Osobnik[y];
+                    y++;
                 }
+                if (i==(Osobnik.Length/LiczbaPmNeurona)-1)
+                {
+                    double[] neuronki = { 
+                        FAktywacji(neurony[i - 1]), 
+                        FAktywacji(neurony[i - 2]) 
+                    };
+                    neurony[i] = FAktywacji(Neuron(PmTymczasowe, neuronki));
+                    wyjscie = neurony[i];
+                }
+                else
+                {
+                    neurony[i] = Neuron(PmTymczasowe, wejscie);
+                }
+                
             }
             return wyjscie;
         }
@@ -198,6 +215,7 @@ namespace AlgGenetyczny
             int LBnP = 4;
             int lWag = 9;
             int lChromosomow = LBnP * lWag;
+            int liczbaParametrowNeurona = 3;
             int lOsobnikow = 13;
             float Min = -10;
             float Max = 10;
@@ -219,7 +237,7 @@ namespace AlgGenetyczny
                     ParametryTymczasowe[z] = Dekodowanie(Bityparametrtymczasowy, Min, Max, LBnP);
                 }
                 PulaDekodowana[i] = ParametryTymczasowe;
-                przystosowanie[i] = Przystosowanie(ParametryTymczasowe);
+                przystosowanie[i] = Przystosowanie(ParametryTymczasowe, liczbaParametrowNeurona);
             }
             Console.WriteLine("Srednia przystosowania pierwotnej puli: " + przystosowanie.Average());
             Console.WriteLine("Najlepsze przystosowanie w pierwotnej puli: " + przystosowanie.Min());
