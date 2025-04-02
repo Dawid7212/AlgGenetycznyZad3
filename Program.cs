@@ -61,10 +61,11 @@ namespace AlgGenetyczny
             wyjscie = neurony[(Osobnik.Length / LiczbaPmNeurona) - 1];
             return wyjscie;
         }
-        public static double FAktywacji(double neuron)
+        public static double FAktywacji(double WartNeurona, double B = 1.0)
         {
-            return neuron * neuron;
+            return 1.0 / (1.0 + Math.Exp(-B * WartNeurona));
         }
+
         public static double Neuron(double[] Wagi, double[] wejscie)
         {
             double neuron = 0;
