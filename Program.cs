@@ -42,21 +42,23 @@ namespace AlgGenetyczny
                     PmTymczasowe[j] = Osobnik[y];
                     y++;
                 }
-                if (i==(Osobnik.Length/LiczbaPmNeurona)-1)
+                if (i<=1)
                 {
-                    double[] neuronki = { 
-                        FAktywacji(neurony[i - 1]), 
-                        FAktywacji(neurony[i - 2]) 
-                    };
-                    neurony[i] = FAktywacji(Neuron(PmTymczasowe, neuronki));
-                    wyjscie = neurony[i];
+                    neurony[i] = Neuron(PmTymczasowe, wejscie);
+                    
                 }
                 else
                 {
-                    neurony[i] = Neuron(PmTymczasowe, wejscie);
+                    double[] neuronki = {
+                        FAktywacji(neurony[i - 1]),
+                        FAktywacji(neurony[i - 2])
+                    };
+                    neurony[i] = FAktywacji(Neuron(PmTymczasowe, neuronki));
+                    
                 }
                 
             }
+            wyjscie = neurony[(Osobnik.Length / LiczbaPmNeurona) - 1];
             return wyjscie;
         }
         public static double FAktywacji(double neuron)
