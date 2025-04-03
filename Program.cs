@@ -26,13 +26,14 @@ namespace AlgGenetyczny
             {
 
                 przystosowanie += Math.Pow(XOR[i] - SiecNeuronowa(wejsciesieci[i],Osobnik,LiczbaPmNeurona), 2);
+                //Console.WriteLine("Wyjscie sieci dla " + XOR[i] + " : "+ SiecNeuronowa(wejsciesieci[i], Osobnik, LiczbaPmNeurona));
             }
             return przystosowanie;
         }
         public static double SiecNeuronowa(double[] wejscie, double[] Osobnik, int LiczbaPmNeurona)
         {
             double[] neurony = new double[Osobnik.Length/LiczbaPmNeurona];
-            double wyjscie = 0;
+            double wyjscie = 0.0;
             int y = 0;
             for (int i=0; i<Osobnik.Length/LiczbaPmNeurona;i++)
             {
@@ -44,17 +45,16 @@ namespace AlgGenetyczny
                 }
                 if (i<=1)
                 {
-                    neurony[i] = Neuron(PmTymczasowe, wejscie);
+                    neurony[i] = FAktywacji(Neuron(PmTymczasowe, wejscie));
                     
                 }
                 else
                 {
                     double[] neuronki = {
-                        FAktywacji(neurony[i - 1]),
-                        FAktywacji(neurony[i - 2])
+                        neurony[i - 1],
+                        neurony[i - 2]
                     };
                     neurony[i] = FAktywacji(Neuron(PmTymczasowe, neuronki));
-                    
                 }
             }
             wyjscie = neurony[(Osobnik.Length / LiczbaPmNeurona) - 1];
@@ -241,7 +241,7 @@ namespace AlgGenetyczny
                 PulaDekodowana[i] = ParametryTymczasowe;
                 przystosowanie[i] = Przystosowanie(ParametryTymczasowe, liczbaParametrowNeurona);
             }
-            for (int i = 0; i < Pula.Length; i++)
+            /*for (int i = 0; i < Pula.Length; i++)
             {
                 for (int j = 0; j < PulaDekodowana[0].Length;j++)
                 {
@@ -249,9 +249,11 @@ namespace AlgGenetyczny
                 }
                 Console.WriteLine();
             }
+            */
             Console.WriteLine("Srednia przystosowania pierwotnej puli: " + przystosowanie.Average());
             Console.WriteLine("Najlepsze przystosowanie w pierwotnej puli: " + przystosowanie.Min());
-            /*
+            
+            
             for (int i = 0; i<100; i++)
             {
                 int[][] NowaPula = new int[Pula.Length][];
@@ -271,15 +273,15 @@ namespace AlgGenetyczny
 
 
                 double[][] nowaPulaDekodowana = new double[NowaPula.Length][];
-                int[] chromosomytmp = new int[Pula[0].Length / lParametrow];
+                int[] chromosomytmp = new int[Pula[0].Length / lWag];
                 double[] noweprzystosowanie = new double[NowaPula.Length];
                 for (int k = 0; k < NowaPula.Length; k++)
                 {
-                    double[] ocenaTymczasowa = new double[lParametrow];
+                    double[] ocenaTymczasowa = new double[lWag];
                     int y = 0;
-                    for (int z = 0; z < lParametrow; z++)
+                    for (int z = 0; z < lWag; z++)
                     {
-                        for (int j = 0; j < NowaPula[0].Length / lParametrow; j++)
+                        for (int j = 0; j < NowaPula[0].Length / lWag; j++)
                         {
                             chromosomytmp[j] = NowaPula[k][y];
                             y++;
@@ -287,15 +289,15 @@ namespace AlgGenetyczny
                         ocenaTymczasowa[z] = Dekodowanie(chromosomytmp, Min, Max, LBnP);
                     }
                     nowaPulaDekodowana[k] = ocenaTymczasowa;
-                    noweprzystosowanie[k] = Przystosowanie(ocenaTymczasowa);
+                    noweprzystosowanie[k] = Przystosowanie(ocenaTymczasowa,liczbaParametrowNeurona);
                 }
                 Console.WriteLine("Srednia przystosowania pierwotnej puli: " + noweprzystosowanie.Average());
                 Console.WriteLine("Najlepsze przystosowanie w pierwotnej puli: " + noweprzystosowanie.Min());
                 Pula = NowaPula;
                 przystosowanie = noweprzystosowanie;
             }
-            */
-                Console.ReadKey();
+         
+             Console.ReadKey();
         }
     }
 }
