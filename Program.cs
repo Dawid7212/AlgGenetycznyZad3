@@ -56,7 +56,6 @@ namespace AlgGenetyczny
                     neurony[i] = FAktywacji(Neuron(PmTymczasowe, neuronki));
                     
                 }
-                
             }
             wyjscie = neurony[(Osobnik.Length / LiczbaPmNeurona) - 1];
             return wyjscie;
@@ -241,6 +240,14 @@ namespace AlgGenetyczny
                 }
                 PulaDekodowana[i] = ParametryTymczasowe;
                 przystosowanie[i] = Przystosowanie(ParametryTymczasowe, liczbaParametrowNeurona);
+            }
+            for (int i = 0; i < Pula.Length; i++)
+            {
+                for (int j = 0; j < PulaDekodowana[0].Length;j++)
+                {
+                    Console.Write(PulaDekodowana[i][j] + " ");
+                }
+                Console.WriteLine();
             }
             Console.WriteLine("Srednia przystosowania pierwotnej puli: " + przystosowanie.Average());
             Console.WriteLine("Najlepsze przystosowanie w pierwotnej puli: " + przystosowanie.Min());
