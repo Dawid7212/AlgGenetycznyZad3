@@ -218,7 +218,7 @@ namespace AlgGenetyczny
             int lWag = 9;
             int lChromosomow = LBnP * lWag;
             int liczbaParametrowNeurona = 3;
-            int lOsobnikow = 13;
+            int lOsobnikow = 30;
             float Min = -10;
             float Max = 10;
             int[][] Pula = StworzPule2(lOsobnikow , lChromosomow);
@@ -297,7 +297,32 @@ namespace AlgGenetyczny
                 przystosowanie = noweprzystosowanie.ToArray();
 
             }
-
+            int[] Najsiec = OperatorHotDeck(Pula, przystosowanie);
+            double[] najlepszeWagi = new double[lWag];
+            int[] chromosomyt = new int[Pula[0].Length / lWag];
+            int y2 = 0;
+            for (int z = 0; z < lWag; z++)
+            {
+                for (int j = 0; j < Pula[0].Length / lWag; j++)
+                {
+                    chromosomyt[j] = Najsiec[y2];
+                    y2++;
+                }
+                najlepszeWagi[z] = Dekodowanie(chromosomyt, Min, Max, LBnP);
+            }
+            Console.WriteLine("Najlesze wagi:");
+            Console.WriteLine("pierwszy neuron (warstwa ukryta) = " + najlepszeWagi[0]+" , "+ najlepszeWagi[1] + " , " + najlepszeWagi[2]);
+            Console.WriteLine("drugi neuron (warstwa ukryta) = " + najlepszeWagi[3] + " , " + najlepszeWagi[4] + " , " + najlepszeWagi[5]);
+            
+            Console.WriteLine("ostatni neuron (warstwa wyjciowa) = " + najlepszeWagi[6] + " , " + najlepszeWagi[7] + " , " + najlepszeWagi[8]);
+            double[] wejscie = new double[2];
+            Console.WriteLine("Testowanie sieci neuronowej : ");
+            Console.WriteLine("Podaj wartość 0/1 dla piwerszego wejścia XOR (ZATWIERDZ ENTEREM):");
+            wejscie[0]=Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Podaj wartość 0/1 dla drugiego wejścia XOR (ZATWIERDZ ENTEREM):");
+            wejscie[1] = Convert.ToDouble(Console.ReadLine());
+            double wyjscie = SiecNeuronowa(wejscie, najlepszeWagi, liczbaParametrowNeurona);
+            Console.WriteLine("Wyjscie sieci: "+wyjscie);
             Console.ReadKey();
         }
     }
