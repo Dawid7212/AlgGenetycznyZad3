@@ -204,7 +204,7 @@ namespace AlgGenetyczny
             int najlepszy = 0;
             for (int i = 1; i < pulaOsobnikow.Length; i++)
             {
-                if (ocenaOsobnikow[i] > ocenaOsobnikow[najlepszy])
+                if (ocenaOsobnikow[i] < ocenaOsobnikow[najlepszy])
                 {
                     najlepszy = i;
                 }
