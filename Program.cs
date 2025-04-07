@@ -156,7 +156,7 @@ namespace AlgGenetyczny
                     najI = skladTurnieju[i];
                 }
             }
-            return pulaOsobnikow[najI];
+            return pulaOsobnikow[najI].ToArray();
         }
         public static (int[], int[]) OperatorKrzyżowania(int[] cbr1, int[] cbr2)
         {
@@ -209,7 +209,7 @@ namespace AlgGenetyczny
                     najlepszy = i;
                 }
             }
-            return pulaOsobnikow[najlepszy];
+            return pulaOsobnikow[najlepszy].ToArray();
         }
         static void Main(string[] args)
         {
@@ -291,13 +291,14 @@ namespace AlgGenetyczny
                     nowaPulaDekodowana[k] = ocenaTymczasowa;
                     noweprzystosowanie[k] = Przystosowanie(ocenaTymczasowa,liczbaParametrowNeurona);
                 }
-                Console.WriteLine("Srednia przystosowania pierwotnej puli: " + noweprzystosowanie.Average());
-                Console.WriteLine("Najlepsze przystosowanie w pierwotnej puli: " + noweprzystosowanie.Min());
-                Pula = NowaPula;
-                przystosowanie = noweprzystosowanie;
+                Console.WriteLine("Srednia przystosowania w" +(i+1)+ "puli: " + noweprzystosowanie.Average());
+                Console.WriteLine("Najlepsze przystosowanie w "+(i+1)+" puli: " + noweprzystosowanie.Min());
+                Pula = NowaPula.Select(a => a.ToArray()).ToArray();
+                przystosowanie = noweprzystosowanie.ToArray();
+
             }
-         
-             Console.ReadKey();
+
+            Console.ReadKey();
         }
     }
 }
